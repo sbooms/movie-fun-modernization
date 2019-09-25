@@ -9,6 +9,7 @@ import static java.util.Arrays.asList;
 @Component
 public class MovieFixtures {
 
+
     public List<Movie> load() {
         return asList(
             new Movie("Wedding Crashers", "David Dobkin", "Comedy", 7, 2005),
