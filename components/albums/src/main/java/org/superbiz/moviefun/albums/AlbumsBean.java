@@ -17,6 +17,7 @@ package org.superbiz.moviefun.albums; /**
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestOperations;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +29,10 @@ public class AlbumsBean {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    public AlbumsBean(String albumsUrl, RestOperations restOperations) {
+
+    }
 
     @Transactional
     public void addAlbum(Album album) {

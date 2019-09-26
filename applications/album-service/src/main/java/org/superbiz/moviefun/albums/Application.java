@@ -1,4 +1,4 @@
-package org.superbiz.moviefun;
+package org.superbiz.moviefun.albums;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -13,19 +13,14 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.superbiz.blobstore.BlobStore;
 import org.superbiz.blobstore.S3Store;
-import org.superbiz.moviefun.moviesapi.movies.MovieServlet;
-import org.superbiz.moviefun.moviesapi.movies.MoviesClient;
+
+import javax.servlet.Servlet;
 
 @SpringBootApplication
 public class Application {
 
     public static void main(String... args) {
         SpringApplication.run(Application.class, args);
-    }
-
-    @Bean
-    public ServletRegistrationBean actionServletRegistration(MovieServlet movieServlet) {
-        return new ServletRegistrationBean(movieServlet, "/moviefun/*");
     }
 
     @Bean
@@ -36,7 +31,7 @@ public class Application {
     @Configuration
     public class ClientConfiguration {
 
-        @Value("${movies.url}") String moviesUrl;
+        @Value("${albums.url}") String albumsUrl;
 
         @Bean
         public RestOperations restOperations() {
@@ -44,15 +39,15 @@ public class Application {
         }
 
         @Bean
-        public MoviesClient moviesClient(RestOperations restOperations) {
-            return new MoviesClient(moviesUrl, restOperations);
+        public AlbumsBean albumsClient(RestOperations restOperations) {
+            return new AlbumsBean(albumsUrl, restOperations);
         }
     }
 
     @Bean
     public BlobStore blobStore(
-        ServiceCredentials serviceCredentials,
-        @Value("${vcap.services.photo-storage.credentials.endpoint:#{null}}") String endpoint
+            ServiceCredentials serviceCredentials,
+            @Value("${vcap.services.photo-storage.credentials.endpoint:#{null}}") String endpoint
     ) {
         String photoStorageAccessKeyId = serviceCredentials.getCredential("photo-storage", "user-provided", "access_key_id");
         String photoStorageSecretKey = serviceCredentials.getCredential("photo-storage", "user-provided", "secret_access_key");
